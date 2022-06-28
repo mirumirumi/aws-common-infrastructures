@@ -1,4 +1,8 @@
+variable "resource_prefix" {
+}
+
 variable "env_name" {
-  type    = string
-  default = "dev"
+}
+
+variable "tags" {
 }

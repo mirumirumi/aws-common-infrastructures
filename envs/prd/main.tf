@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "common-dev-tfstate-artifactstore"
+    bucket = "common-prd-tfstate-artifactstore"
     region = "ap-northeast-1"
     key    = "terraform.tfstate"
   }
@@ -8,7 +8,7 @@ terraform {
 
 locals {
   resource_prefix = "common"
-  env_name        = "dev"
+  env_name        = "prd"
 }
 
 locals {
