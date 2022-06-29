@@ -24,6 +24,12 @@ jobs:
         with:
           terraform_version: 1.2.2
 
+      - if: ${{ github.ref == 'refs/heads/main' }}
+        run: ENVIRONMENT_NAME = 'dev'
+
+      - if: ${{ github.ref == 'refs/heads/release/prd' }}
+        run: ENVIRONMENT_NAME = 'prd'
+
       - name: exec commands
         run: |
           cd envs/${ENVIRONMENT_NAME}/
