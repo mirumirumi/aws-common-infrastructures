@@ -24,7 +24,15 @@ locals {
 }
 
 module "modules" {
-  source   = "../../modules"
+  source   = "../../modules/common"
+
+  resource_prefix = local.resource_prefix
+  env_name        = local.env_name
+  tags            = local.tags
+}
+
+module "virginia" {
+  source   = "../../modules/virginia"
 
   resource_prefix = local.resource_prefix
   env_name        = local.env_name
