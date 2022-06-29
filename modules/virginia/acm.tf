@@ -1,5 +1,6 @@
 resource "aws_acm_certificate" "mirumi_tech" {
   provider = aws.useast1
+  count    = var.env_name == "prd" ? 1 : 0
 
   domain_name       = "mirumi.tech"
   validation_method = "DNS"
@@ -18,6 +19,7 @@ resource "aws_acm_certificate_validation" "mirumi_tech" {
 
 resource "aws_acm_certificate" "kei_ooo" {
   provider = aws.useast1
+  count    = var.env_name == "prd" ? 1 : 0
 
   domain_name       = "kei.ooo"
   validation_method = "DNS"
