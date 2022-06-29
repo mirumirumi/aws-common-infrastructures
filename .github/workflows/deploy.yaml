@@ -25,16 +25,14 @@ jobs:
           terraform_version: 1.2.2
 
       - if: ${{ github.ref == 'refs/heads/main' }}
-        run: ENVIRONMENT_NAME='dev'
+        run: echo "ENVIRONMENT_NAME=dev" >> $GITHUB_ENV
 
       - if: ${{ github.ref == 'refs/heads/release/prd' }}
-        run: ENVIRONMENT_NAME='prd'
+        run: echo "ENVIRONMENT_NAME=prd" >> $GITHUB_ENV
 
       - name: exec commands
         run: |
-          echo ${ENVIRONMENT_NAME}
-          cd envs/${ENVIRONMENT_NAME}/
-          ls -lha
+          cd envs/${{ env.ENVIRONMENT_NAME }}/
           terraform init --upgrade
           terraform plan
           terraform apply --auto-approve
