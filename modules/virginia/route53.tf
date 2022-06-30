@@ -21,8 +21,8 @@ resource "aws_route53_record" "mirumi_tech_A" {
 
 resource "aws_route53_record" "mirumi_tech_ACM" {
   zone_id = aws_route53_zone.mirumi_tech[count.index].zone_id
-  name    = tolist(aws_acm_certificate.mirumi_tech.domain_validation_options)[0]["resource_record_name"]  # https://bit.ly/3brCgDf
-  records = [tolist(aws_acm_certificate.mirumi_tech.domain_validation_options)[0]["resource_record_value"]]
+  name    = tolist(aws_acm_certificate.mirumi_tech[count.index].domain_validation_options)[0]["resource_record_name"]  # https://bit.ly/3brCgDf
+  records = [tolist(aws_acm_certificate.mirumi_tech[count.index].domain_validation_options)[0]["resource_record_value"]]
   type    = "CNAME"
   ttl     = 3600
   
@@ -56,8 +56,8 @@ resource "aws_route53_record" "kei_ooo_A" {
 
 resource "aws_route53_record" "kei_ooo_ACM" {
   zone_id = aws_route53_zone.kei_ooo[count.index].zone_id
-  name    = tolist(aws_acm_certificate.kei_ooo.domain_validation_options)[0]["resource_record_name"]  # https://bit.ly/3brCgDf
-  records = [tolist(aws_acm_certificate.kei_ooo.domain_validation_options)[0]["resource_record_value"]]
+  name    = tolist(aws_acm_certificate.kei_ooo[count.index].domain_validation_options)[0]["resource_record_name"]  # https://bit.ly/3brCgDf
+  records = [tolist(aws_acm_certificate.kei_ooo[count.index].domain_validation_options)[0]["resource_record_value"]]
   type    = "CNAME"
   ttl     = 3600
   
