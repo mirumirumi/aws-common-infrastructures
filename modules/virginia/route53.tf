@@ -11,7 +11,7 @@ resource "aws_route53_record" "mirumi_tech_A" {
   type    = "A"
 
   alias {
-    name                   = "xxxxxxxxxxxxx.cloudfront.net."
+    name                   = "d30d6r27et6zkn.cloudfront.net."
     zone_id                = "Z2FDTNDATAQYW2"  # https://bit.ly/3HV6NFX
     evaluate_target_health = false
   }
