@@ -13,9 +13,6 @@ terraform {
 locals {
   resource_prefix = "common"
   env_name        = "prd"
-}
-
-locals {
   tags = {
     project = "common"
     env     = local.env_name
