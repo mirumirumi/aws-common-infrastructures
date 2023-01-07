@@ -93,3 +93,25 @@ resource "aws_s3_bucket_acl" "mirumi_media" {
   bucket = "mirumime-${var.env_name}-mirumi-media"
   acl    = "private"
 }
+
+resource "aws_s3_bucket_policy" "mirumi_media" {
+  count  = var.env_name == "prd" ? 1 : 0
+  bucket = "mirumime-${var.env_name}-mirumi-media"
+  policy = <<POLICY
+{
+  "Id": "OAIBucketPolicy",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "OAIBucketPolicy",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": !Sub "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${aws_cloudfront_origin_access_identity.mirumi_media}"
+      },
+      "Action": "s3:GetObject",
+      "Resource": !Sub "arn:aws:s3:::${aws_s3_bucket.mirumi_media}/*"
+    }
+  ]
+}
+POLICY
+}
