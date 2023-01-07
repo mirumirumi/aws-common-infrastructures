@@ -106,10 +106,10 @@ resource "aws_s3_bucket_policy" "mirumi_media" {
       "Sid": "OAIBucketPolicy",
       "Effect": "Allow",
       "Principal": {
-        "AWS": !Sub "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${aws_cloudfront_origin_access_identity.mirumi_media}"
+        "AWS": !Sub "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${aws_cloudfront_origin_access_identity.mirumi_media[count.index]}"
       },
       "Action": "s3:GetObject",
-      "Resource": !Sub "arn:aws:s3:::${aws_s3_bucket.mirumi_media}/*"
+      "Resource": !Sub "arn:aws:s3:::${aws_s3_bucket.mirumi_media[count.index]}/*"
     }
   ]
 }
