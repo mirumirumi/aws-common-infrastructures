@@ -1,61 +1,70 @@
-# resource "aws_cloudfront_distribution" "mirumi_me" {
-#   count = var.env_name == "prd" ? 1 : 0
+resource "aws_cloudfront_distribution" "mirumi_me" {
+  count = var.env_name == "prd" ? 1 : 0
 
-#   origin {
-#     domain_name = "${aws_s3_bucket.mirumi_me.id}.s3-website-ap-northeast-1.amazonaws.com"
-#     origin_id   = aws_s3_bucket.mirumi_me[count.index].id
+  origin {
+    domain_name = "${aws_s3_bucket.mirumi_me[count.index].id}.s3-website-ap-northeast-1.amazonaws.com"
+    origin_id   = aws_s3_bucket.mirumi_me[count.index].id
 
-#     custom_origin_config {
-#       http_port              = 80
-#       https_port             = 443
-#       origin_protocol_policy = "http-only"
-#       origin_ssl_protocols   = ["TLSv1.2"]
-#     }
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "http-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
 
-#     custom_header {
-#       name  = "Referer"
-#       value = aws_s3_bucket.mirumi_me[count.index].bucket_domain_name
-#     }
-#   }
+    custom_header {
+      name  = "Referer"
+      value = aws_s3_bucket.mirumi_me[count.index].bucket_domain_name
+    }
+  }
 
-#   aliases             = ["mirumi.me"]
-#   default_root_object = "index.html"
-#   enabled             = true
+  # aliases             = ["mirumi.me"]
+  default_root_object = "index.html"
+  enabled             = true
 
-#   viewer_certificate {
-#     cloudfront_default_certificate = var.env_name == "dev" ? true : null
-#     acm_certificate_arn            = var.env_name == "dev" ? null : var.acm_arn_mirumi_me
-#     minimum_protocol_version       = var.env_name == "dev" ? null : "TLSv1.2_2021"
-#     ssl_support_method             = var.env_name == "dev" ? null : "sni-only"
-#   }
+  viewer_certificate {
+    cloudfront_default_certificate = true
+  }
+  # viewer_certificate {
+  #   cloudfront_default_certificate = var.env_name == "dev" ? true : null
+  #   acm_certificate_arn            = var.env_name == "dev" ? null : var.acm_arn_mirumi_me
+  #   minimum_protocol_version       = var.env_name == "dev" ? null : "TLSv1.2_2021"
+  #   ssl_support_method             = var.env_name == "dev" ? null : "sni-only"
+  # }
 
-#   default_cache_behavior {
-#     allowed_methods        = ["GET" ,"HEAD"]
-#     cached_methods         = ["GET" ,"HEAD"]
-#     cache_policy_id        = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"  # CachingDisabled
-#     target_origin_id       = aws_s3_bucket.mirumi_me[count.index].id
-#     compress               = true
-#     viewer_protocol_policy = "redirect-to-https"
-#   }
+  default_cache_behavior {
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
+    cache_policy_id        = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"  # CachingDisabled
+    target_origin_id       = aws_s3_bucket.mirumi_me[count.index].id
+    compress               = true
+    viewer_protocol_policy = "redirect-to-https"
+  }
 
-#   ordered_cache_behavior {
-#     allowed_methods        = ["GET" ,"HEAD"]
-#     cached_methods         = ["GET" ,"HEAD"]
-#     cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"  # CachingOptimized
-#     target_origin_id       = aws_s3_bucket.mirumi_me[count.index].id
-#     compress               = true
-#     path_pattern           = "/_nuxt/*"
-#     viewer_protocol_policy = "redirect-to-https"
-#   }
+  ordered_cache_behavior {
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
+    cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"  # CachingOptimized
+    target_origin_id       = aws_s3_bucket.mirumi_me[count.index].id
+    compress               = true
+    path_pattern           = "/_nuxt/*"
+    viewer_protocol_policy = "redirect-to-https"
+  }
 
-#   restrictions {
-#     geo_restriction {
-#       restriction_type = "none"
-#     }
-#   }
+  custom_error_response {
+    error_code         = 404
+    response_code      = 404
+    response_page_path = "/assets/404.html"
+  }
 
-#   tags = var.tags
-# }
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
+
+  tags = var.tags
+}
 
 resource "aws_cloudfront_distribution" "mirumi_media" {
   count = var.env_name == "prd" ? 1 : 0
@@ -80,8 +89,8 @@ resource "aws_cloudfront_distribution" "mirumi_media" {
   }
 
   default_cache_behavior {
-    allowed_methods        = ["GET" ,"HEAD"]
-    cached_methods         = ["GET" ,"HEAD"]
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
     cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"  # CachingOptimized
     target_origin_id       = aws_s3_bucket.mirumi_media[count.index].id
     compress               = true
