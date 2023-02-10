@@ -91,7 +91,7 @@ resource "aws_cloudfront_distribution" "mirumi_media" {
   default_cache_behavior {
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
-    cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"  # CachingOptimized
+    cache_policy_id        = "b2884449-e4de-46a7-ac36-70bc7f1ddd6d"  # CachingOptimizedForUncompressedObjects
     target_origin_id       = aws_s3_bucket.mirumi_media[count.index].id
     compress               = true
     viewer_protocol_policy = "redirect-to-https"
