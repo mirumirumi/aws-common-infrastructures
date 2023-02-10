@@ -35,7 +35,7 @@ resource "aws_cloudfront_distribution" "mirumi_me" {
   default_cache_behavior {
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
-    cache_policy_id        = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"  # CachingDisabled
+    cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"  # CachingOptimized
     target_origin_id       = aws_s3_bucket.mirumi_me[count.index].id
     compress               = true
     viewer_protocol_policy = "redirect-to-https"
@@ -91,7 +91,7 @@ resource "aws_cloudfront_distribution" "mirumi_media" {
   default_cache_behavior {
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
-    cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"  # CachingOptimized
+    cache_policy_id        = "b2884449-e4de-46a7-ac36-70bc7f1ddd6d"  # CachingOptimizedForUncompressedObjects
     target_origin_id       = aws_s3_bucket.mirumi_media[count.index].id
     compress               = true
     viewer_protocol_policy = "redirect-to-https"
@@ -113,9 +113,13 @@ resource "aws_cloudfront_origin_access_identity" "mirumi_media" {
 
 
 
-resource "aws_cloudfront_cache_policy" "caching_optimized_and_more" {  # for API GW
-  name        = "${var.resource_prefix}-${var.env_name}-caching-optimized-and-more"
-  comment     = "dev and prd are same"
+resource "aws_cloudfront_cache_policy" "caching_optimized_and_additional_headers" {
+  # For API Gateway
+
+  count = var.env_name == "prd" ? 1 : 0
+
+  name        = "${var.resource_prefix}-${var.env_name}-caching-optimized-and-additional-headers"
+  comment     = "The follow headers included (cache spec is same as CachingOptimized): `Origin`, `Authorization`, `Referer`"
   min_ttl     = 1
   max_ttl     = 31536000
   default_ttl = 86400
