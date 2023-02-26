@@ -18,19 +18,16 @@ resource "aws_cloudfront_distribution" "mirumi_me" {
     }
   }
 
-  # aliases             = ["mirumi.me"]
+  aliases             = ["mirumi.me"]
   default_root_object = "index.html"
   enabled             = true
 
   viewer_certificate {
-    cloudfront_default_certificate = true
+    cloudfront_default_certificate = var.env_name == "dev" ? true : null
+    acm_certificate_arn            = var.env_name == "dev" ? null : var.acm_arn_mirumi_me
+    minimum_protocol_version       = var.env_name == "dev" ? null : "TLSv1.2_2021"
+    ssl_support_method             = var.env_name == "dev" ? null : "sni-only"
   }
-  # viewer_certificate {
-  #   cloudfront_default_certificate = var.env_name == "dev" ? true : null
-  #   acm_certificate_arn            = var.env_name == "dev" ? null : var.acm_arn_mirumi_me
-  #   minimum_protocol_version       = var.env_name == "dev" ? null : "TLSv1.2_2021"
-  #   ssl_support_method             = var.env_name == "dev" ? null : "sni-only"
-  # }
 
   default_cache_behavior {
     allowed_methods        = ["GET", "HEAD"]
