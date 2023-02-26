@@ -27,7 +27,7 @@ module "modules" {  // If you want to change the name, you must do `moved` etc
   env_name        = local.env_name
   tags            = local.tags
 
-  # acm_arn_mirumi_me    = module.virginia.acm_arn_mirumi_me
+  acm_arn_mirumi_me    = module.virginia.acm_arn_mirumi_me
   acm_arn_mirumi_media = module.virginia.acm_arn_mirumi_media
 }
 
@@ -38,6 +38,6 @@ module "virginia" {
   env_name        = local.env_name
   tags            = local.tags
 
-  # cloudfront_domain_name_mirumi_me    = module.modules.cloudfront_domain_name_mirumi_me
+  cloudfront_domain_name_mirumi_me    = module.modules.cloudfront_domain_name_mirumi_me
   cloudfront_domain_name_mirumi_media = module.modules.cloudfront_domain_name_mirumi_media
 }
