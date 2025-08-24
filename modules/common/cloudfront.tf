@@ -1,9 +1,9 @@
-resource "aws_cloudfront_distribution" "mirumi_me" {
-  count = var.env_name == "prd" ? 1 : 0
+# mirumi.me, mirumi.media
 
+resource "aws_cloudfront_distribution" "mirumi_me" {
   origin {
-    domain_name = "${aws_s3_bucket.mirumi_me[count.index].id}.s3-website-ap-northeast-1.amazonaws.com"
-    origin_id   = aws_s3_bucket.mirumi_me[count.index].id
+    domain_name = "${aws_s3_bucket.mirumi_me.id}.s3-website-ap-northeast-1.amazonaws.com"
+    origin_id   = aws_s3_bucket.mirumi_me.id
 
     custom_origin_config {
       http_port              = 80
@@ -14,11 +14,11 @@ resource "aws_cloudfront_distribution" "mirumi_me" {
 
     custom_header {
       name  = "Referer"
-      value = aws_s3_bucket.mirumi_me[count.index].bucket_domain_name
+      value = aws_s3_bucket.mirumi_me.bucket_domain_name
     }
   }
 
-  aliases             = ["mirumi.me"]
+  aliases             = var.env_name == "dev" ? null : ["mirumi.me"]
   default_root_object = "index.html"
   enabled             = true
 
@@ -32,8 +32,8 @@ resource "aws_cloudfront_distribution" "mirumi_me" {
   default_cache_behavior {
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
-    cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"  # CachingOptimized
-    target_origin_id       = aws_s3_bucket.mirumi_me[count.index].id
+    cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6" # CachingOptimized
+    target_origin_id       = aws_s3_bucket.mirumi_me.id
     compress               = true
     viewer_protocol_policy = "redirect-to-https"
   }
@@ -41,8 +41,8 @@ resource "aws_cloudfront_distribution" "mirumi_me" {
   ordered_cache_behavior {
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
-    cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"  # CachingOptimized
-    target_origin_id       = aws_s3_bucket.mirumi_me[count.index].id
+    cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6" # CachingOptimized
+    target_origin_id       = aws_s3_bucket.mirumi_me.id
     compress               = true
     path_pattern           = "/_nuxt/*"
     viewer_protocol_policy = "redirect-to-https"
@@ -88,7 +88,7 @@ resource "aws_cloudfront_distribution" "mirumi_media" {
   default_cache_behavior {
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
-    cache_policy_id        = "b2884449-e4de-46a7-ac36-70bc7f1ddd6d"  # CachingOptimizedForUncompressedObjects
+    cache_policy_id        = "b2884449-e4de-46a7-ac36-70bc7f1ddd6d" # CachingOptimizedForUncompressedObjects
     target_origin_id       = aws_s3_bucket.mirumi_media[count.index].id
     compress               = true
     viewer_protocol_policy = "redirect-to-https"
@@ -108,7 +108,7 @@ resource "aws_cloudfront_origin_access_identity" "mirumi_media" {
   comment = "mirumi.media for assets of mirumi.me"
 }
 
-
+# Cache policy
 
 resource "aws_cloudfront_cache_policy" "caching_optimized_and_additional_headers" {
   # For API Gateway
@@ -120,7 +120,7 @@ resource "aws_cloudfront_cache_policy" "caching_optimized_and_additional_headers
   min_ttl     = 1
   max_ttl     = 31536000
   default_ttl = 86400
-  
+
   parameters_in_cache_key_and_forwarded_to_origin {
     cookies_config {
       cookie_behavior = "all"
