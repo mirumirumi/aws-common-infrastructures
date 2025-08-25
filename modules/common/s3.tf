@@ -29,10 +29,12 @@ resource "aws_s3_bucket" "mirumi_me" {
   tags   = var.tags
 }
 
-resource "aws_s3_bucket_acl" "mirumi_me" {
-  bucket = "mirumime-${var.env_name}-mirumi-me"
-  acl    = "private"
-}
+# いつからかエラーが出るようになったらしく、Terraform で管理しないようがいい雰囲気があるっぽいので外した（No changes）
+# https://zenn.dev/dyokoo3/scraps/ed9c3ef9b425b2
+# resource "aws_s3_bucket_acl" "mirumi_me" {
+#   bucket = "mirumime-${var.env_name}-mirumi-me"
+#   acl    = "private"
+# }
 
 resource "aws_s3_bucket_public_access_block" "mirumi_me" {
   bucket = "mirumime-${var.env_name}-mirumi-me"
